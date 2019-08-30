@@ -12,7 +12,7 @@ import "./index.css";
 */
 
 const Todo = () => {
-	const [userInput, setUserInput] = useState(null);
+	const [userInput, setUserInput] = useState("");
 	const [todos, setTodo] = useState([]);
 
 	const readInputData = e => {
@@ -20,6 +20,7 @@ const Todo = () => {
 	};
 	const createTodo = () => {
 		setTodo([...todos, { id: uuid(), todo: userInput }]);
+		setUserInput("");
 	};
 
 	const removeTodoItem = id => {
@@ -29,13 +30,13 @@ const Todo = () => {
 
 	return (
 		<div>
-			<input type="text" onChange={readInputData} />
+			<input type="text" value={userInput} onChange={readInputData} />
 			<button onClick={createTodo}>Add Todo</button>
 			<ul>
-				{todos.map(todo => (
-					<li key={todo.id}>
-						{todo.todo}{" "}
-						<button onClick={() => removeTodoItem(todo.id)}>
+				{todos.map(({ id, todo }) => (
+					<li key={todo}>
+						{todo}{" "}
+						<button onClick={() => removeTodoItem(id)}>
 							Delete
 						</button>
 					</li>
