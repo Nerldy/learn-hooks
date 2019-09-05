@@ -1,56 +1,44 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import "./index.css";
 
 /*
   Instructions:
-    Assume you're creating an app that allows the user to 
-    post status updates (ala Twitter). Your UI should have a
-    textarea and a button. The button should be disabled if the
-    length of the textarea is 0 or greater than 240 characters.
-    The document's title should inform the user on how many
-    characters they have left to type before they hit the 240
-    character limit - "115 characters left."
+    You'll notice below that we have a Wait component.
+    The purpose of Wait is to render the `ui` prop after
+    `delay` seconds. Before `delay` seconds, it should
+    render `placeholder`.
 */
 
-const App = () => {
-	const maxLen = 240;
-	const [statusValue, setStatusValue] = useState("");
-	const [textLen, setTextLen] = useState(240);
-	const [remainingCharacters, setRemainingCharacters] = useState(0);
+const timeMeOut = (time, ui) => {
+	return setTimeout(() => {
+		return { ui, uiState: true };
+	}, time);
+};
 
-	const checkStatusValue = e => {
-		const currentTextLen = e.target.value.length;
-		setStatusValue(e.target.value);
-		setRemainingCharacters(currentTextLen);
-	};
-
+function Wait({ delay = 3000, placeholder, ui }) {
+	const [uiState, setUiState] = useState(false);
 	useEffect(() => {
-		setTextLen(maxLen - remainingCharacters);
-	}, [remainingCharacters]);
-
+		setTimeout(() => {
+			setUiState(true);
+		}, delay);
+	}, [delay]);
 	return (
 		<div>
-			<p>{textLen} characters left</p>
-			<textarea
-				name="status"
-				id="status"
-				cols="30"
-				rows="10"
-				required
-				maxLength="240"
-				value={statusValue}
-				onChange={checkStatusValue}></textarea>
-			<button
-				disabled={
-					remainingCharacters <= 0 || remainingCharacters > maxLen
-						? true
-						: false
-				}>
-				Tweet
-			</button>
+			<h1>Ona</h1>
+			{uiState ? ui : placeholder}
 		</div>
+	);
+}
+
+const App = () => {
+	return (
+		<Wait
+			delay={3000}
+			placeholder={<p>Waiting...</p>}
+			ui={<p>This text should appear after 3 seconds.</p>}
+		/>
 	);
 };
 ReactDOM.render(<App />, document.getElementById("root"));
