@@ -15,21 +15,24 @@ import "./index.css";
 */
 
 const App = () => {
-	const [maxLen, calculateRemainingLen] = useState(240);
+	const maxLen = 240;
 	const [statusValue, setStatusValue] = useState("");
-	// const [textLen, setTextLen ] = useEffect(maxLen)
+	const [textLen, setTextLen] = useState(240);
+	const [remainingCharacters, setRemainingCharacters] = useState(0);
 
 	const checkStatusValue = e => {
-		const textLen = e.target.value.length;
-		console.log({ textLen });
+		const currentTextLen = e.target.value.length;
 		setStatusValue(e.target.value);
+		setRemainingCharacters(currentTextLen);
 	};
+
 	useEffect(() => {
-		console.log("render");
-	}, [maxLen, textLen]);
+		setTextLen(maxLen - remainingCharacters);
+	}, [remainingCharacters]);
+
 	return (
 		<div>
-			<p>{maxLen} characters left</p>
+			<p>{textLen} characters left</p>
 			<textarea
 				name="status"
 				id="status"
@@ -39,6 +42,14 @@ const App = () => {
 				maxLength="240"
 				value={statusValue}
 				onChange={checkStatusValue}></textarea>
+			<button
+				disabled={
+					remainingCharacters <= 0 || remainingCharacters > maxLen
+						? true
+						: false
+				}>
+				Tweet
+			</button>
 		</div>
 	);
 };
