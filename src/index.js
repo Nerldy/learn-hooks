@@ -2,20 +2,21 @@ import React, { Component, useState } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import "./index.css";
+import BookContextProvider from "./contexts/BookContext";
+import Navbar from "./components/Navbar";
+// import "./reset.css";
+import "./index.css";
+import BookList from "./components/BookList";
+import BookForm from "./components/BookForm";
 
 const App = () => {
-	const [theme, setTheme] = useState("grey");
-
-	const toBlue = () => setTheme("blue");
-	const toGrey = () => setTheme("grey");
-
 	return (
-		<div className={`boxer ${theme}`}>
-			{theme === "grey" ? (
-				<button onClick={toBlue}>Blue</button>
-			) : (
-				<button onClick={toGrey}>Grey</button>
-			)}
+		<div>
+			<BookContextProvider>
+				<Navbar />
+				<BookForm />
+				<BookList />
+			</BookContextProvider>
 		</div>
 	);
 };
